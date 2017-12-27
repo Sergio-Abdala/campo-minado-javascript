@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Campo Minado</title>
+	<style type="text/css">
+		input{
+			width: 40px;
+		}
+		b#cont_marca{
+			position: absolute;
+			margin-left: 50px;
+			margin-top: -50px;
+		}
+		button#troca{
+			background: green;
+			border-radius: 10px;
+		}
+	</style>
+</head>
+<body onload="jogo.muda_marcador(1);">
+	<div id="confguracoes">
+		dimensões:
+		<label for="linha"><small>linhas: </small></label><input type="number" id="linha">
+		<label for="coluna"><small>colunas: </small></label><input type="number" id="coluna"><br />
+		<label for="bombas">Qtd Bombas: </label><input type="number" id="bombas">
+		<button onclick="inicio();">iniciar jogo</button>
+	</div>
+	<table border="1 #000;" >
+		<tbody id="campo"></tbody>		
+	</table>
+	
+	<div>
+		<button onclick="troca_acao();" id="troca">marca</button>&nbsp;&nbsp;&nbsp;&nbsp;
+		<div id="marcado" ><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'> </div>
+		<div onclick="jogo.muda_marcador(1); document.getElementById('triangulo').style='display:none;'; document.getElementById('bomba').style='display:block;';" id="triangulo" style="display: none;"><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'></div>
+		<div onclick="jogo.muda_marcador(0); document.getElementById('triangulo').style='display:block;'; document.getElementById('bomba').style='display:none;';" id="bomba"><img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'></div><b id="cont_marca"></b>
+	</div>
+
+<script type="text/javascript">
+	let jogo = new CampoMinado();
+	/*1) (0.3) Crie	 o	 objeto	 CampoMinado,	 que	 armazenará	 as	 propriedades	 que	
+	gerenciam	o	nosso	campo	minado.	*/
+	function CampoMinado(){
+		this.bomba = "BOM";
+		/*Adicione	nesse objeto	as	propriedades, linhas,	colunas	e bombas.*/
+		this.linhas;
+		this.colunas;
+		this.bombas;
+		this.conteudo = new Array();
+		this.save = new Array();
+		this.imgMarca = document.getElementById('marcado').innerHTML;
+		/*2) (0.4) Crie	 uma	 função	 onde	 são	 passados	 dois	 valores	 (respectivamente	 o	
+		número	de	linhas	e	colunas)	e	é	montado	o	campo	minado	com	as	citadas	
+		dimensões.	Fique	a	vontade	para	usar	a	estrutura	HTML	que	melhor	convir	
+		para	você.*/
+		this.tamanho = function (linhas, colunas){
+			/* (0.2) Garanta	que	o	campo	minado	tenha	no	mínimo	5	linhas	e	5	colunas.*/
+			if (linhas < 5) {
+				alert("numero minimo de linhas igual a 5");
+				linhas = 5;
+			}
+			if (colunas < 5) {
+				alert("numero minimo de colunas igual a 5");
+				colunas = 5;
+			}
+			this.linhas = linhas;
+			this.colunas = colunas;
+			let tabela="";
+			let cont_cel=0;
+			for(let k=0 ; k<linhas ; k++){
+				tabela += "<tr>";
+				for(let kk=0 ; kk<colunas ; kk++){
+					/*(0.2)	 Faça	 com	 que	 cada	 célula	 desse	 campo	minado	 tenha	 a	 cor	cinza.*/
+					tabela += "<td style='background:#babaca; width: 25px; height: 25px;' id='"+k+"_"+kk+"' onclick='jogo.seleciona("+k+", "+kk+")'> </td>";
+				}
+				tabela += "</tr>";
+			}
+			document.getElementById('campo').innerHTML = tabela;
+		};
+		// FIM DE JOGO...
+		this.mostra = function(){
+
+			//substitui por imagem...
+			for (let i = 0 ; i < this.conteudo.length ; i++){
+				this.save[i] = this.bombas[i].innerHTML;
+				if (this.conteudo[i] == this.bomba){
+					this.bombas[i].innerHTML = "<img src='img/explodindo.gif' style='width: 25px; height:25px;'>";
+				}
+			}			
+		}
+		this.marcados = function(){
+			// TRABALHANDO AQUI............!!!!!!!!!!!!!!!!!!!!!!!!!! CONTAR CELULAS MARCADAS COMO BOMBA PELO USUARIO...
+			let cont_marca = 0;
+			for (let i = 0 ; i < this.bombas.length ; i++) {
+				if (this.bombas[i].innerHTML == this.imgMarca) {
+					cont_marca++;
+				}
+			}
+			document.getElementById('cont_marca').innerHTML = cont_marca;
+		}
+		/*5) (0.3)	Crie	uma	função	que	simula	a	seleção	de	uma célula	do	campo	minado,	recebendo uma linha e uma coluna.*/
+		this.seleciona = function(linha, coluna){
+
+			if (document.getElementById('troca').innerHTML == "marca"){
+				for (let i = 0 ; i < this.bombas.length ; i++) {
+							let lc = this.bombas[i].id.split("_");
+						if (linha == lc[0] && coluna == lc[1]) {
+							this.bombas[i].innerHTML = this.imgMarca;
+						}
+				}
+			}else{
+				for (let i = 0 ; i < this.bombas.length ; i++) {
+							let lc = this.bombas[i].id.split("_");
+						if (linha == lc[0] && coluna == lc[1]) {						
+							//e bomba...
+							if (this.conteudo[i] == this.bomba){
+								/* (0.4) Caso	 a	 pessoa	 passe	 os	parâmetros	de	uma	célula	com	uma	bomba,	a	célula	deverá	ficar	vermelha,*/
+								//this.bombas[i].innerHTML = "<img src='img/bomba-02.gif' style='width: 25px; height:25px;'>";
+								this.bombas[i].style = "background: red; width: 25PX; height: 25PX;";
+								alert("BOM...");
+								this.mostra();
+							}else{
+								/*caso contrário deverá	ficar verde.*/
+								//ñ é bomba
+								this.bombas[i].style = "background: green; width: 25PX; height: 25PX;";
+								//colocar numero dentro da celula...
+								/*6) (0.3)	Faça	com	que	uma	célula	que	não	possui	bombas,	ao	ser	selecionada, apresente	o	número	de	bombas	vizinhas a ela*/
+								//cima 
+								let soma_bomb=0;
+								if (linha>0 && coluna>0) {
+									soma_bomb += this.aux_sel(linha-1, coluna-1);
+								}
+								if (linha>0) {
+									soma_bomb += this.aux_sel(linha-1, coluna);
+								}
+								if (linha>0 && coluna<this.colunas-1) {
+									soma_bomb += this.aux_sel(linha-1, coluna+1);
+								}
+								//meio
+								if (coluna>0) {
+									soma_bomb += this.aux_sel(linha, coluna-1);
+								}
+								if (coluna<this.colunas-1) {
+									soma_bomb += this.aux_sel(linha, coluna+1);
+								}
+								//baixo
+								if (linha<this.linhas-1 && coluna>0) {
+									soma_bomb += this.aux_sel(linha+1, coluna-1);
+								}
+								if (linha<this.linhas-1) {
+									soma_bomb += this.aux_sel(linha+1, coluna);
+								}
+								if (linha<this.linhas-1 && coluna<this.colunas-1) {
+									soma_bomb += this.aux_sel(linha+1, coluna+1);
+								}
+								this.bombas[i].innerHTML = soma_bomb;
+								
+								if (!soma_bomb) {
+									//cima
+										if (linha>0 && coluna>0 && this.dentro_cel(linha-1, coluna-1) == " ") {							
+											this.seleciona(linha-1, coluna-1);
+										}
+										if (linha>0 && this.dentro_cel(linha-1, coluna) == " ") {
+											this.seleciona(linha-1, coluna);
+										}
+										if (linha>0 && coluna<this.colunas-1 && this.dentro_cel(linha-1, coluna+1) == " ") {
+											this.seleciona(linha-1, coluna+1);
+										}										
+									//meio
+										if (coluna>0 && this.dentro_cel(linha, coluna-1) == " ") {											
+											this.seleciona(linha, coluna-1);
+										}
+										if (coluna<this.colunas-1 && this.dentro_cel(linha, coluna+1) == " ") {											
+											this.seleciona(linha, coluna+1);
+										}
+									//baixo	
+										if (linha<this.linhas-1 && coluna>0 && this.dentro_cel(linha+1, coluna-1) == " ") {
+											this.seleciona(linha+1, coluna-1);
+										}
+										if (linha<this.linhas-1 && this.dentro_cel(linha+1, coluna) == " ") {
+											this.seleciona(linha+1, coluna);
+										}
+										if (linha<this.linhas-1 && coluna<this.colunas-1 && this.dentro_cel(linha+1, coluna+1) == " ") {
+											this.seleciona(linha+1, coluna+1);
+										}
+								}
+							}
+						}
+				}
+			}
+			//contagem de marcados...
+			this.marcados();
+		}
+		this.aux_sel = function(linha, coluna){
+			for (let i = 0 ; i < this.bombas.length ; i++) {
+					let lc = this.bombas[i].id.split("_");
+					if (linha == lc[0] && coluna == lc[1]) {						
+						//e bomba...
+						if (this.conteudo[i] == this.bomba){
+							return 1;
+						}else{
+							//ñ é bomba
+							return 0;
+						}
+					}
+			}
+		}
+		this.dentro_cel = function(linha, coluna){
+			for (let i = 0 ; i < this.bombas.length ; i++) {
+					let lc = this.bombas[i].id.split("_");
+					if (linha == lc[0] && coluna == lc[1]) {
+						return this.bombas[i].innerHTML;
+					}
+			}
+		}			
+	}
+	function inicio(){
+		jogo.tamanho(document.getElementById('linha').value, document.getElementById('coluna').value);
+		jogo.sorteia_bomb(document.getElementById('bombas').value);
+	}
+	function troca_acao(){
+		if (document.getElementById('troca').innerHTML == "marca") {
+			document.getElementById('troca').innerHTML = "abre";
+			document.getElementById('troca').style = "background:red; border-radius:5px;";
+		}else{
+			document.getElementById('troca').innerHTML = "marca";
+			document.getElementById('troca').style = "background:green; border-radius:10px;";
+		}
+	}
+	/*3) (0.2)	Altere	o	método anterior de	modo	a	 receber	um	 terceiro	parâmetro, que	recebe	o	número	de	bombas	que	preencherão	o	campo	minado,	*/
+	CampoMinado.prototype.sorteia_bomb = function(qtdbomb){
+		//zerar sorteio
+		for (let i = 0 ; i < this.conteudo.length ; i++){
+			this.conteudo[i] = "";
+		}
+		/*sendo	3 o	 número	 mínimo	 de	 bombas.*/
+		if (qtdbomb < 3) {
+			alert("numero minimo de bombas é 3...");
+			qtdbomb = 3;
+		}
+		let tam = this.linhas*this.colunas;
+		if (tam < qtdbomb) {
+			alert("existem muitas bombas para o tamanho do campo");
+		}else{
+			this.tamanho(this.linhas, this.colunas);
+			let cont_bomba=0;
+			let celula = document.getElementsByTagName('td');
+			/*(0.4) Crie	 um	 mecanismo que garanta a criação dessas	n	posições das bombas	de forma aleatória no campo minado
+			4) (0.3)	 Garanta	 que	 o	 método	 de	 posicionamento	 das	 bombas	 não	 atribua uma mesma	posição	para	diferentes	bombas.*/
+			while(cont_bomba < qtdbomb){
+				//sorteia linha e coluna...
+				let sort_l = Math.floor(Math.random()*this.linhas);
+				let sort_c = Math.floor(Math.random()*this.colunas);
+				//varre tabela campo atribuindo bomba a celula sorteada...			
+				cont_bomba=0;
+				for (let i = 0 ; i < celula.length ; i++) {
+					let lc = celula[i].id.split("_");
+					if (sort_l == lc[0] && sort_c == lc[1]) {
+						//celula[i].innerHTML = this.bomba;
+						this.conteudo[i] = this.bomba;
+
+					}
+					if (this.conteudo[i] == this.bomba) {
+						cont_bomba++;
+					}
+				}
+			}
+			this.bombas = document.getElementsByTagName('td');			
+		}
+	}
+	CampoMinado.prototype.muda_marcador = function(fig){		
+		switch(fig){
+			case 0:
+				document.getElementById('marcado').innerHTML = "<img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'>";
+			break;
+			case 1:
+				document.getElementById('marcado').innerHTML = "<img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'>";
+			break;
+		}
+		//um refresh na variavel!!!!
+		this.imgMarca = document.getElementById('marcado').innerHTML;
+		this.marcados();
+	}
+</script>
+</body>
+</html>
