@@ -39,6 +39,8 @@
 
 <script type="text/javascript">
 
+	let jogo = new CampoMinado();
+	/*codado depois do curso...*/
 	document.addEventListener("contextmenu", e => e.preventDefault());
 	document.addEventListener("mousedown", function(e) {
 		switch(e.buttons) {
@@ -47,6 +49,7 @@
 			break
 		case 2:
 			console.log("Right button")
+			troca_acao();
 			break
 		case 3:
 			console.log("Left and Right button")
@@ -56,13 +59,10 @@
 			break
 		}
 	});
+	/*fim codagem depois do curso*/
 
 
-
-
-
-
-	let jogo = new CampoMinado();
+	
 	/*1) (0.3) Crie	 o	 objeto	 CampoMinado,	 que	 armazenará	 as	 propriedades	 que	
 	gerenciam	o	nosso	campo	minado.	*/
 	function CampoMinado(){
