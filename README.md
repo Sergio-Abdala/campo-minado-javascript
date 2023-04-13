@@ -1,2 +1,3 @@
 # campo-minado-javascript
 campo minado em javascript para fins academicos
+implementar botão direito do mouse mudar função padrão para função do jogo de revelar conteudo da area...
