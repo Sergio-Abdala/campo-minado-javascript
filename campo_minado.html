@@ -27,9 +27,12 @@
 			<div class="col">
 
 				<!-- CONFIGURAR -->
-				
+
 				<div id="confguracoes">
-					dimensões:
+					<p>
+						dimensões:
+					</p>
+					
 					<label for="linha"><small>linhas: </small></label><input type="number" id="linha">
 					<label for="coluna"><small>colunas: </small></label><input type="number" id="coluna"><br />
 					<label for="bombas">Qtd Bombas: </label><input type="number" id="bombas">
@@ -40,10 +43,25 @@
 				</table>
 				
 				<div>
-					<button onclick="troca_acao();" id="troca">marca</button>&nbsp;&nbsp;&nbsp;&nbsp;
-					<div id="marcado" ><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'> </div>
-					<div onclick="jogo.muda_marcador(1); document.getElementById('triangulo').style='display:none;'; document.getElementById('bomba').style='display:block;';" id="triangulo" style="display: none;"><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'></div>
-					<div onclick="jogo.muda_marcador(0); document.getElementById('triangulo').style='display:block;'; document.getElementById('bomba').style='display:none;';" id="bomba"><img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'></div><b id="cont_marca"></b>
+					
+					<button onclick="troca_acao();" id="troca">
+						marca
+					</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+					<div id="marcado" >
+						<img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'> 
+					</div>
+
+					<div onclick="jogo.muda_marcador(1); document.getElementById('triangulo').style='display:none;'; document.getElementById('bomba').style='display:block;';" id="triangulo" style="display: none;">
+						<img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'>
+					</div>
+
+					<div onclick="jogo.muda_marcador(0); document.getElementById('triangulo').style='display:block;'; document.getElementById('bomba').style='display:none;';" id="bomba">
+						<img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'>
+					</div>
+					
+					<b id="cont_marca"></b>
+
 				</div>
 
 				<!-- FIM CONFIGURAR -->
