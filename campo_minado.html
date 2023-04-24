@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 	<meta charset="utf-8">
 	<title>Campo Minado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<style type="text/css">
 		input{
 			width: 40px;
@@ -19,24 +22,36 @@
 	</style>
 </head>
 <body onload="jogo.muda_marcador(1);">
-	<div id="confguracoes">
-		dimensões:
-		<label for="linha"><small>linhas: </small></label><input type="number" id="linha">
-		<label for="coluna"><small>colunas: </small></label><input type="number" id="coluna"><br />
-		<label for="bombas">Qtd Bombas: </label><input type="number" id="bombas">
-		<button onclick="inicio();">iniciar jogo</button>
-	</div>
-	<table border="1 #000;" >
-		<tbody id="campo"></tbody>		
-	</table>
-	
-	<div>
-		<button onclick="troca_acao();" id="troca">marca</button>&nbsp;&nbsp;&nbsp;&nbsp;
-		<div id="marcado" ><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'> </div>
-		<div onclick="jogo.muda_marcador(1); document.getElementById('triangulo').style='display:none;'; document.getElementById('bomba').style='display:block;';" id="triangulo" style="display: none;"><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'></div>
-		<div onclick="jogo.muda_marcador(0); document.getElementById('triangulo').style='display:block;'; document.getElementById('bomba').style='display:none;';" id="bomba"><img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'></div><b id="cont_marca"></b>
-	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col">
 
+				<!-- CONFIGURAR -->
+				
+				<div id="confguracoes">
+					dimensões:
+					<label for="linha"><small>linhas: </small></label><input type="number" id="linha">
+					<label for="coluna"><small>colunas: </small></label><input type="number" id="coluna"><br />
+					<label for="bombas">Qtd Bombas: </label><input type="number" id="bombas">
+					<button onclick="inicio();">iniciar jogo</button>
+				</div>
+				<table border="1 #000;" >
+					<tbody id="campo"></tbody>		
+				</table>
+				
+				<div>
+					<button onclick="troca_acao();" id="troca">marca</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<div id="marcado" ><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'> </div>
+					<div onclick="jogo.muda_marcador(1); document.getElementById('triangulo').style='display:none;'; document.getElementById('bomba').style='display:block;';" id="triangulo" style="display: none;"><img src='img/cuidado_bomba.png' style='width: 25px; height:20px;'></div>
+					<div onclick="jogo.muda_marcador(0); document.getElementById('triangulo').style='display:block;'; document.getElementById('bomba').style='display:none;';" id="bomba"><img src='img/cuidado_bomba2.jpg' style='width: 25px; height:20px;'></div><b id="cont_marca"></b>
+				</div>
+
+				<!-- FIM CONFIGURAR -->
+
+			</div>
+		</div>
+	</div>
+	
 <script type="text/javascript">
 
 	let jogo = new CampoMinado();
@@ -308,4 +323,5 @@
 	}
 </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </html>
